@@ -159,6 +159,8 @@ Uso libre bajo tu responsabilidad.
 
 ## 👨‍💻 Autor ModGames44
 
+NOTA: DESCONECTAR INTERNET ANTES DE SEGUIR CON LOS PASOS
+
 Desarrollado para control avanzado de seguridad en sistemas Windows.
 
 📘 Tutorial de uso – Flujo correcto del programa
