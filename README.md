@@ -5,6 +5,8 @@ Herramienta en PowerShell para gestionar, reparar y controlar las principales ca
 <img width="975" height="510" alt="Captura de pantalla 2026-03-24 100928" src="https://github.com/user-attachments/assets/dfefe26a-a042-4c5d-97a3-b8e42a0637b7" />
 ---
 
+<img width="977" height="509" alt="Captura de pantalla 2026-03-29 130206" src="https://github.com/user-attachments/assets/c1cd701d-6e7a-4d5a-8867-5547b255700f" />
+
 ## 🚀 Descripción
 
 **Windows Security Features Manager** es un script interactivo que permite:
