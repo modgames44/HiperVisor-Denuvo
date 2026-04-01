@@ -2,12 +2,7 @@
 # 🛡️ Windows Security Features Manager
 
 Herramienta en PowerShell para gestionar, reparar y controlar las principales características de seguridad avanzadas de Windows.
-<img width="975" height="510" alt="Captura de pantalla 2026-03-24 100928" src="https://github.com/user-attachments/assets/dfefe26a-a042-4c5d-97a3-b8e42a0637b7" />
----
 
-<img width="977" height="509" alt="Captura de pantalla 2026-03-29 130206" src="https://github.com/user-attachments/assets/c1cd701d-6e7a-4d5a-8867-5547b255700f" />
-
-<img width="973" height="507" alt="Captura de pantalla 2026-03-31 082239" src="https://github.com/user-attachments/assets/741fe2a5-eecb-445f-9132-aff09d20c635" />
 
 
 ## 🚀 Descripción
