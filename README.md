@@ -1,153 +1,97 @@
-# HiperVisor-Denuvo
-# 🛡️ Windows Security Features Manager
+# HyperVision v2.0
+### Windows Security Features Manager
+> Gestor interactivo de características de seguridad de Windows
 
-Herramienta en PowerShell para gestionar, reparar y controlar las principales características de seguridad avanzadas de Windows.
+---
 
+## ¿Qué es HyperVision?
 
+**HyperVision** es un script interactivo de línea de comandos que permite ver el estado, activar y desactivar las protecciones de seguridad basadas en virtualización de Windows, con verificaciones previas que evitan cambios inútiles o situaciones problemáticas al reiniciar.
 
-## 🚀 Descripción
-
-**Windows Security Features Manager** es un script interactivo que permite:
-
-- Ver el estado de seguridad del sistema
-- Activar / desactivar protecciones avanzadas
-- Reparar configuraciones dañadas
-- Reiniciar el sistema en modos específicos (incluyendo modo avanzado F7)
-
-Está diseñado especialmente para escenarios donde:
-- Se han modificado configuraciones de seguridad (ej: bypass de VBS)
-- HVCI / Memory Integrity no se activa correctamente
-- Existen conflictos con drivers o configuraciones del sistema
+Está pensado para usuarios que necesitan gestionar estas configuraciones de forma controlada, con la posibilidad de revertir cualquier cambio al estado original del sistema.
 
 ---
 
 ## 🔐 Características gestionadas
 
-El programa permite controlar:
-
-- ✅ VBS (Virtualization-Based Security)
-- ✅ HVCI / Memory Integrity
-- ✅ Windows Hello Protection
-- ✅ System Guard Secure Launch
-- ✅ Credential Guard
-- ✅ KVA Shadow (Meltdown Mitigation)
-- ✅ Windows Hypervisor
+| Característica | Descripción |
+|---|---|
+| **VBS** (Virtualization-Based Security) | Aislamiento de memoria crítica mediante el hypervisor |
+| **HVCI / Memory Integrity** | Protección del kernel contra drivers no confiables |
+| **Windows Hello Protection** | Protección de autenticación biométrica y PIN |
+| **System Guard Secure Launch** | Verificación de integridad del sistema en el arranque |
+| **Credential Guard** | Aislamiento de credenciales del sistema |
+| **KVA Shadow** | Mitigación de la vulnerabilidad Meltdown |
+| **Windows Hypervisor** | Control del hipervisor de Windows |
 
 ---
 
 ## 🧠 ¿Qué es VBS y HVCI?
 
-- **VBS (Virtualization-Based Security)** usa el hypervisor de Windows para crear una región de memoria aislada donde se ejecutan componentes críticos del sistema. :contentReference[oaicite:0]{index=0}  
-- Esto protege credenciales y procesos incluso si el sistema es comprometido. :contentReference[oaicite:1]{index=1}  
-- **HVCI (Memory Integrity)** asegura que solo drivers y código confiable puedan ejecutarse en el kernel. :contentReference[oaicite:2]{index=2}  
+**VBS (Virtualization-Based Security)** usa el hypervisor de Windows para crear una región de memoria aislada donde se ejecutan componentes críticos del sistema, protegiendo credenciales y procesos incluso si el sistema es comprometido.
 
-👉 En conjunto, reducen significativamente ataques a nivel kernel y malware avanzado.
+**HVCI (Memory Integrity)** se apoya en VBS para validar que solo drivers y código de confianza puedan ejecutarse en el kernel, bloqueando la inyección de código malicioso en tiempo de ejecución.
+
+Juntos, reducen significativamente la superficie de ataque frente a malware avanzado y ataques a nivel kernel.
 
 ---
 
-## 📋 Funcionalidades principales
+## 📋 Funcionalidades del menú
 
 ### 🔍 1. Ver estado del sistema
-Muestra el estado actual de todas las protecciones.
+Muestra el estado actual de todas las protecciones, incluyendo:
+- Si la virtualización está habilitada en BIOS
+- Si alguna característica tiene UEFI Lock activo
+- Si BitLocker está activo en la unidad del sistema
 
----
-
-### ⚙️ 2. Activar todas las características
-Habilita automáticamente todas las protecciones disponibles.
-
----
+### ✅ 2. Activar todas las características
+Habilita todas las protecciones disponibles. Advierte si VT-x no está activo en BIOS antes de proceder.
 
 ### ⚠️ 3. Desactivar todas las características
-Desactiva todas las protecciones (uso bajo tu responsabilidad).
+Desactiva todas las protecciones con confirmación previa. Incluye:
+- Detección y omisión de características con UEFI Lock
+- Suspensión automática de BitLocker antes del reinicio avanzado
+- Arranque directo en Startup Settings para desactivar la firma de controladores (F7)
+
+### 🔁 4. Revertir cambios
+Restaura **únicamente** las características que el propio script desactivó, respetando el estado original del sistema. No activa características que ya estaban desactivadas antes de ejecutar el script.
 
 ---
 
-### 🧩 4. Configuración individual
-Permite activar/desactivar cada feature manualmente.
+## 🛡️ Verificaciones de seguridad integradas
 
----
+HyperVision realiza las siguientes comprobaciones automáticas antes de aplicar cambios:
 
-### 🛠️ 5. Verificar y reparar configuración
-Intenta restaurar configuraciones de seguridad dañadas o incompletas.
-
----
-
-### 📄 6. Ver log
-Muestra el registro de acciones realizadas por el script.
-
----
-
-### 🔁 7. Reinicio normal
-Reinicia el sistema inmediatamente.
-
----
-
-### 🔥 8. Reinicio avanzado (modo F7)
-
-- Realiza un **doble reinicio automático**
-- Entra directamente en:
-  👉 *Startup Settings*
-- Permite usar:
-  👉 **F7 → Deshabilitar firma de controladores**
-
-✔️ No deja cambios permanentes en el sistema
+- **VT-x / SVM en BIOS** — Detecta si la virtualización está habilitada en el firmware. Sin ella, activar VBS desde el registro no tiene efecto.
+- **UEFI Lock** — Identifica si VBS, HVCI o Credential Guard están bloqueadas por firmware. Las omite en lugar de escribir cambios inútiles en el registro.
+- **BitLocker** — Si está activo, lo suspende automáticamente por dos ciclos de arranque para evitar que Windows solicite la clave de recuperación al entrar al menú avanzado.
+- **HypervisorLaunchType exacto** — Al revertir, restaura el valor original del hypervisor en lugar de asumir siempre `auto`.
 
 ---
 
 ## ⚙️ Requisitos
 
 - Windows 10 / Windows 11
-- CPU compatible con virtualización (Intel VT-x / AMD-V)
-- PowerShell
-- ⚠️ **EJECUTAR COMO ADMINISTRADOR (OBLIGATORIO)**
+- CPU con virtualización habilitada en BIOS (Intel VT-x / AMD-V)
+- PowerShell disponible en el sistema
+- **⚠️ Ejecutar como Administrador (obligatorio)**
 
 ---
 
-## ❗ IMPORTANTE
+## ❗ Advertencias
 
-Este script realiza cambios en:
-
-- Registro de Windows
-- Configuración de arranque (BCD)
-- Políticas de seguridad
-
-👉 Ejecutarlo sin privilegios de administrador causará errores o fallos.
-
----
-
-## 🔐 Seguridad
-
-El script:
-
-✔️ No instala software  
-✔️ No modifica archivos del sistema  
-✔️ Solo cambia configuraciones internas de Windows  
-
----
-
-## ⚠️ Advertencias
-
-- Algunos cambios requieren reinicio
-- HVCI puede no activarse si existen drivers incompatibles
-- Desactivar protecciones reduce la seguridad del sistema
-
----
-
-## 🧪 Casos de uso
-
-- Reparar VBS/HVCI después de modificaciones
-- Diagnóstico de seguridad en Windows
-- Preparar entorno para pruebas (drivers, bypass, etc.)
-- Restaurar configuración segura del sistema
+- Algunos cambios requieren reinicio para aplicarse
+- Desactivar las protecciones reduce la seguridad del sistema
+- HVCI puede no activarse si existen drivers incompatibles instalados
+- Se recomienda **desconectarse de internet** mientras las protecciones están deshabilitadas
 
 ---
 
 ## 📌 Notas técnicas
 
-- VBS utiliza el hypervisor para aislar memoria crítica del sistema
-- HVCI valida drivers en tiempo de ejecución
-- Credential Guard protege credenciales del sistema
-- El modo F7 permite cargar drivers sin firma temporalmente
+- El script guarda el estado previo en `HKLM\SOFTWARE\ManageVBS` antes de realizar cambios
+- La clave se elimina automáticamente una vez que todos los cambios son revertidos exitosamente
+- No instala software, no modifica archivos del sistema, solo cambia configuraciones internas de Windows y el BCD
 
 ---
 
@@ -157,6 +101,9 @@ Uso libre bajo tu responsabilidad.
 
 ---
 
+## 👨‍💻 Autor
+
+**ModGames44**
 ## 👨‍💻 Autor ModGames44
 
 NOTA: DESCONECTAR INTERNET ANTES DE SEGUIR CON LOS PASOS
