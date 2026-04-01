@@ -2,6 +2,8 @@
 ### Windows Security Features Manager
 > Gestor interactivo de características de seguridad de Windows
 
+<img width="820" height="913" alt="Captura de pantalla 2026-04-01 084732" src="https://github.com/user-attachments/assets/3b8b9bef-8ab9-4c48-9948-8a81ebc10226" />
+
 ---
 
 ## ¿Qué es HyperVision?
@@ -101,115 +103,99 @@ Uso libre bajo tu responsabilidad.
 
 ---
 
-## 👨‍💻 Autor
 
-**ModGames44**
 ## 👨‍💻 Autor ModGames44
 
 NOTA: DESCONECTAR INTERNET ANTES DE SEGUIR CON LOS PASOS
 
 Desarrollado para control avanzado de seguridad en sistemas Windows.
 
-📘 Tutorial de uso – Flujo correcto del programa
-⚠️ Requisito obligatorio
+# 📘 Tutorial de uso — HyperVision v2.0
 
-Antes de usar el programa:
+> ⚠️ **DESCONECTA INTERNET ANTES DE SEGUIR CON LOS PASOS**
 
-👉 Ejecutar siempre como Administrador
+---
 
-Si no se ejecuta con privilegios elevados:
+## ⚠️ Requisito obligatorio
 
-❌ No podrá modificar el sistema
-❌ Fallarán los cambios de seguridad
-❌ El script no funcionará correctamente
-🧠 Contexto importante
+**Ejecutar siempre como Administrador.**
 
-Las protecciones como:
+Sin privilegios elevados el script no podrá modificar el registro, el BCD ni las políticas de seguridad del sistema, y fallará al intentar aplicar cualquier cambio.
 
-VBS (Virtualization-Based Security)
-HVCI / Integridad de memoria
+---
 
-usan virtualización para bloquear drivers no firmados o inseguros, evitando ataques a nivel kernel
+## 🧠 Contexto importante
 
-👉 Por eso, cuando las desactivas:
+Protecciones como **VBS** y **HVCI** usan la virtualización del procesador para aislar memoria crítica del sistema y bloquear drivers no firmados o inseguros, evitando ataques a nivel kernel.
 
-Windows sigue bloqueando ciertos drivers hasta usar modo especial (F7)
-🚀 Flujo correcto de uso
-🔻 1. Desactivar protecciones
+Cuando las desactivas, Windows puede seguir bloqueando ciertos drivers hasta que se use el **modo especial F7** en el arranque. Por eso la opción **[3]** incluye un reinicio directo al menú avanzado.
 
-Usa:
+---
 
-👉 Opción 3 – Desactivar todas las características
+## 🔍 Antes de hacer cualquier cambio — Opción 1
 
-Esto:
+Usa siempre **[1] Ver Estado** primero. Te mostrará:
 
-Desactiva VBS
-Desactiva HVCI
-Desactiva protecciones avanzadas
-⚠️ 2. IMPORTANTE: Reinicio especial obligatorio
+- Si la virtualización está habilitada en tu BIOS
+- Si alguna protección tiene **UEFI Lock** activo (en ese caso no puede desactivarse por registro)
+- Si **BitLocker** está activo (el script lo maneja automáticamente, pero es útil saberlo)
+- El estado actual de cada protección
 
-Después de usar la opción 3:
+---
 
-👉 Debes usar Opción 8 – Reinicio avanzado
+## 🔻 Desactivar protecciones — Opción 3
 
-¿Qué hace?
-Ejecuta un doble reinicio automático
-Te lleva directamente a:
+Usa **[3] Desactivar Todas las Características** cuando necesites operar con drivers o configuraciones que entran en conflicto con VBS/HVCI.
 
-👉 Startup Settings (pantalla negra)
+**¿Qué hace el script automáticamente?**
+- Guarda el estado actual de cada protección para poder revertirlo después
+- Omite las características con UEFI Lock en lugar de escribir cambios inútiles
+- Suspende BitLocker si está activo, para evitar que pida clave de recuperación al reiniciar
+- Configura el arranque para entrar directamente a **Startup Settings**
 
-🎯 3. En el menú avanzado
+**Al reiniciar, cuando aparezca el menú:**
+> 👉 Presiona **F7 → Deshabilitar uso obligatorio de controladores firmados**
 
-Cuando aparezca el menú:
+Esto es necesario porque HVCI puede seguir bloqueando drivers aunque esté desactivado por registro, hasta que se complete el arranque con firma deshabilitada.
 
-👉 Presiona:
+---
 
-F7 → Deshabilitar uso obligatorio de controladores firmados
-🧠 ¿Por qué es necesario?
+## ✅ Restaurar protecciones — Opción 2 o Opción 4
 
-Porque HVCI evita que drivers no firmados se carguen
+Cuando quieras volver al estado seguro tienes dos caminos:
 
-👉 Sin F7:
+### Opción 2 — Activar todas las características
+Enciende **todas** las protecciones sin importar cuál estaba activa antes. Útil si quieres partir desde un estado máximo de seguridad.
 
-Algunos drivers seguirán bloqueados
-El cambio no será completo
-🔁 Cómo revertir los cambios (volver a estado seguro)
+### Opción 4 — Revertir cambios
+Restaura **únicamente** lo que el script desactivó, respetando el estado original del sistema. Si alguna protección ya estaba desactivada antes de ejecutar el script, esta opción no la toca.
 
-Cuando quieras restaurar la seguridad:
+> 💡 **Recomendación:** usa **[4] Revertir** si quieres volver exactamente al estado en que estaba tu sistema antes. Usa **[2] Activar Todo** solo si quieres asegurarte de que todo está encendido.
 
-✅ 1. Activar protecciones
+Después de cualquiera de las dos opciones, reinicia el equipo cuando el script lo indique para aplicar los cambios.
 
-👉 Usa:
+---
 
-Opción 2 – Activar todas las características
+## 🧾 Resumen rápido
 
-🔄 2. Reiniciar normalmente
+| Acción | Opción |
+|---|---|
+| Ver estado del sistema | **[1]** |
+| Activar todas las protecciones | **[2]** |
+| Desactivar todas las protecciones + reinicio F7 | **[3]** |
+| Revertir solo los cambios del script | **[4]** |
 
-👉 Luego usa:
+---
 
-Opción 7 – Reinicio normal
+## ⚠️ Notas importantes
 
-✔️ Resultado esperado
+- El modo F7 es **temporal** — solo dura esa sesión de arranque
+- Si HVCI no se reactiva después de usar **[2]** o **[4]**, es probable que haya drivers incompatibles instalados en el sistema
+- Desactivar estas protecciones **reduce la seguridad del equipo** — vuelve a activarlas cuando ya no las necesites desactivadas
+- Mantén el **internet desconectado** mientras las protecciones están inhabilitadas
 
-Después del reinicio:
+---
 
-VBS activo
-HVCI activo (si no hay drivers incompatibles)
-Sistema protegido nuevamente
-⚠️ Notas importantes
-Si HVCI no se activa:
-👉 Hay drivers incompatibles que debes corregir
-Desactivar estas protecciones:
-👉 Reduce la seguridad del sistema
-El modo F7 es temporal
-👉 Solo dura esa sesión de arranque
-🧾 Resumen rápido
-Acción	Opción
-Desactivar seguridad	3
-Reinicio especial (F7)	8
-Activar seguridad	2
-Reinicio normal	7
-💡 Recomendación final
+## 💡 Recomendación final
 
-Usa este flujo solo cuando sea necesario (drivers, pruebas, etc.)
-y vuelve a activar las protecciones después.
+Usa este flujo solo cuando sea estrictamente necesario y vuelve a activar las protecciones una vez que hayas terminado.
