@@ -1,10 +1,12 @@
-# HyperVision v2.0
+# HyperVision
 ### Windows Security Features Manager
 > Gestor interactivo de características de seguridad de Windows
 
 <img width="820" height="913" alt="Captura de pantalla 2026-04-01 084732" src="https://github.com/user-attachments/assets/3b8b9bef-8ab9-4c48-9948-8a81ebc10226" />
 
 ---
+<img width="818" height="727" alt="Captura de pantalla 2026-04-02 004310" src="https://github.com/user-attachments/assets/c21c3fa3-fc10-4a86-b4ab-c5f50d3d5ba3" />
+
 
 ## ¿Qué es HyperVision?
 
