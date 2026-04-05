@@ -2,11 +2,7 @@
 ### Windows Security Features Manager
 > Gestor interactivo de características de seguridad de Windows
 
-<img width="820" height="913" alt="Captura de pantalla 2026-04-01 084732" src="https://github.com/user-attachments/assets/3b8b9bef-8ab9-4c48-9948-8a81ebc10226" />
-
----
-<img width="820" height="910" alt="image" src="https://github.com/user-attachments/assets/2f618738-88ca-40d2-aec2-0511adcea926" />
-
+<img width="808" height="985" alt="image" src="https://github.com/user-attachments/assets/6197df73-096a-464e-90da-a971061d31e0" />
 
 ## ¿Qué es HyperVision?
 
